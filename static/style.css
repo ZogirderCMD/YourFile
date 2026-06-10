@@ -1,0 +1,42 @@
+body {
+    background-color: rgb(172, 172, 172);
+    font-family: 'Courier New', Courier, monospace;
+}
+div#title {
+    background-color: rgb(110, 110, 110);
+    text-align: center;
+    font-size: 50px;
+    border-radius: 10px;
+    padding-top: 10;
+    padding-bottom: 10;
+    color: white;
+    font-weight: bolder;
+}
+div#uploading {
+    background-color: rgb(110, 110, 110);
+    font-size: 30px;
+    border-radius: 10px;
+    margin-top: 25;
+    padding-top: 10;
+    margin-bottom: 10;
+    padding-left: 10;
+    color: white;
+    font-weight: bolder;
+}
+table#file {
+    background-color: rgb(110, 110, 110);
+    text-align: left;
+    font-size: 30px;
+    border-radius: 10px;
+    border: 5px solid rgb(110, 110, 110);
+    color: white;
+    font-weight: bolder;
+}
+th {
+    background-color: rgb(148, 148, 148);
+    border: 5px solid rgb(110, 110, 110);
+    border-radius: 10px;
+}
+button#fbutton {
+    margin-left: 10px;
+}

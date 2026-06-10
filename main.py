@@ -1,4 +1,5 @@
 from tools import Que, Logger
+from flask import render_template, Flask, request
 from objects import *
 import sqlite3
 
@@ -21,14 +22,28 @@ que.query(open("tables.sql", "r").read())
 logger.log("Tables created!")
 
 FileManager = FileManager(logger=logger, que=que)
+logger.log("File Manager initialised!")
 
-uid = FileManager.save_file(open("file.docx", "rb").read(), "Паспорт проекта")
-print(uid)
-input()
-res = FileManager.get_file(uid)
-print(res)
-input()
-res = FileManager.remove_file(uid)
-print(res)
+app = Flask(__name__)
+logger.log("Flask App initialised!")
+
+@app.route("/")
+def main():
+    return render_template("index.html")
+
+@app.route("/getFiles", methods=["GET"])
+def getFiles():
+    return FileManager.get_files(request.remote_addr)
+
+@app.route("/uploadFile", methods=["POST"])
+def getFiles():
+    
+    return 0
+
+@app.route("/removeFile/<uid>", methods=["DELETE"])
+def getFiles(uid):
+    return FileManager.remove_file(uid, request.remote_addr)
+
+app.run()
 
 logger.log("Shutting down...")
