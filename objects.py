@@ -15,11 +15,12 @@ class FileManager:
             self.logger.log("Created files path!")
         except FileExistsError:
             pass
-    def save_file(self, file:bytes, name:str, owner_ip:str):
+    def save_file(self, file, owner_ip:str):
+        name = file.filename
         self.que.query("SELECT uid FROM files")
         uid = gen_uid()
         print(uid)
-        open(f"{self.path}/{uid}", "wb").write(file)
+        file.save(f"{self.path}/{uid}")
         self.logger.log(f"File stored in path for {owner_ip}!")
         self.que.query("INSERT INTO files VALUES (?, ?, ?)", (uid, name, owner_ip, ))
         self.logger.log(f"File stored in database for {owner_ip}!")

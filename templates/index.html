@@ -5,11 +5,15 @@
     <body>
         <div id="title">YourFile</div>
         <div id="uploading">
-            <label>Выберите файл для загрузки:</label><br>
-            <input type="file" id="file"><br>
-            <button id="load">Загрузить</button><br><br>
+            <form action="/uploadFile" method="post" enctype="multipart/form-data">
+                <div>
+                    <label for="file">Выберите файл для загрузки</label>
+                    <input type="file" id="file" name="file" multiple /><br>
+                    <button>Загрузить</button>
+                </div>
+            </form>
         </div>
-        <table id="file">
+        <table id="files">
             <tr>
                 <th>Файл1</th>
                 <th><button id="fbuttton">Удалить</button></th>
@@ -25,6 +29,43 @@
         </table>
     </body>
     <script>
-        
+        async function reset() {
+            const response = await fetch("/getFiles", {
+                    method: "GET",
+                    credentials: "include"
+                }
+            )
+            result = await response.json()
+            if (response.ok) {
+                var pack = result.result
+                var files = document.getElementById("files")
+                files.textContent = ""
+                for (let i = 0; i<pack.length; i++) {
+                    var tr = document.createElement("tr")
+                    
+                    th = document.createElement("th")
+                    th.textContent = pack[i].name
+                    tr.appendChild(th)
+
+                    th = document.createElement("th")
+                    var button = document.createElement("button")
+                    button.textContent = "Удалить"
+                    button.addEventListener("click", async () => {
+                        const response = await fetch(`/removeFile/${pack[i].uid}`, {
+                                method: "DELETE",
+                                credentials: "include"
+                            }
+                        )
+                        reset()
+                    })
+                    th.appendChild(button)
+                    tr.appendChild(th)
+                    
+                    files.appendChild(tr)
+                }
+            }
+        }
+
+        reset()
     </script>
 </html>

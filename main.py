@@ -1,5 +1,5 @@
 from tools import Que, Logger
-from flask import render_template, Flask, request
+from flask import render_template, Flask, request, redirect, url_for
 from objects import *
 import sqlite3
 
@@ -27,7 +27,7 @@ logger.log("File Manager initialised!")
 app = Flask(__name__)
 logger.log("Flask App initialised!")
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def main():
     return render_template("index.html")
 
@@ -36,12 +36,13 @@ def getFiles():
     return FileManager.get_files(request.remote_addr)
 
 @app.route("/uploadFile", methods=["POST"])
-def getFiles():
-    
-    return 0
+def uploadFile():
+    file = request.files['file']
+    FileManager.save_file(file, request.remote_addr)
+    return redirect(url_for("main"))
 
 @app.route("/removeFile/<uid>", methods=["DELETE"])
-def getFiles(uid):
+def removeFile(uid):
     return FileManager.remove_file(uid, request.remote_addr)
 
 app.run()
