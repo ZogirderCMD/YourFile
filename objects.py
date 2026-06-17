@@ -25,6 +25,20 @@ class FileManager:
         self.que.query("INSERT INTO files VALUES (?, ?, ?)", (uid, name, owner_ip, ))
         self.logger.log(f"File stored in database for {owner_ip}!")
         return uid
+    def prepare_file(self, uid):
+        self.que.query("SELECT filename FROM files WHERE uid=?", (uid, ))
+        res = self.que.cur.fetchall()
+        if len(res) == 0: return "File not found!"
+        filename = res[0][0]
+        open(f"{self.path}/{filename}", "wb").write(open(f"{self.path}/{uid}", "rb").read())
+        return {"result": f"{self.path}/{filename}"}
+    def unprepare_file(self, uid):
+        self.que.query("SELECT filename FROM files WHERE uid=?", (uid, ))
+        res = self.que.cur.fetchall()
+        if len(res) == 0: return "File not found!"
+        filename = res[0][0]
+        os.remove(f"{self.path}/{filename}")
+        return {"result": f"Gud"}
     def get_file(self, uid):
         self.que.query("SELECT filename FROM files WHERE uid=?", (uid, ))
         res = self.que.cur.fetchall()

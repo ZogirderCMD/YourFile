@@ -44,11 +44,21 @@ def uploadFile():
 @app.route("/downloadFile/<uid>", methods=["GET"])
 def downloadFile(uid):
     file = FileManager.get_file(uid)
-    return render_template("download.html", fileName=file["filename"])
+    return render_template("download.html", fileName=file["filename"], fileUID=file["uid"])
+
+@app.route("/prepareFile/<uid>", methods=["GET"])
+def preapreFile(uid):
+    return FileManager.prepare_file(uid)
+
+@app.route("/unprepareFile/<uid>", methods=["GET"])
+def unprepareFile(uid):
+    FileManager.unprepare_file(uid)
 
 @app.route("/removeFile/<uid>", methods=["DELETE"])
 def removeFile(uid):
     return FileManager.remove_file(uid, request.remote_addr)
+
+logger.log("App started!")
 
 app.run()
 

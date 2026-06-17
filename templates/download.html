@@ -4,15 +4,21 @@
     <head><title>Скачивание файла</title></head>
     <body>
         <div id="title">YourFile</div><br>
+        <label id="{{ fileUID }}"></label>
         <button id="download" style="font-size: 75px;">Скачать {{ fileName }}</button>
     </body>
     <script>
         document.getElementById("download").addEventListener("click", async () => {
-                    const response = await fetch(`/removeFile/${pack[i].uid}`, {
+            fileUID = document.querySelector("label").id
+            const response = await fetch(`/prepareFile/${fileUID}`, {
                     method: "GET",
                     credentials: "include"
                 }
             )
+            result = await response.json()
+            path = result.result
+            way = `${window.location.protocol}//${window.location.host}/${path}`
+            window.open(way)
         })
     </script>
 </html>
