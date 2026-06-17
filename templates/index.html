@@ -48,7 +48,7 @@
                     tr.appendChild(th)
 
                     th = document.createElement("th")
-                    var button = document.createElement("button")
+                    button = document.createElement("button")
                     button.textContent = "Удалить"
                     button.addEventListener("click", async () => {
                         const response = await fetch(`/removeFile/${pack[i].uid}`, {
@@ -61,6 +61,15 @@
                     th.appendChild(button)
                     tr.appendChild(th)
                     
+                    th = document.createElement("th")
+                    button = document.createElement("button")
+                    button.textContent = "Ссылка"
+                    button.addEventListener("click", async () => {
+                        await window.open(`${window.location.protocol}//${window.location.host}/downloadFile/${pack[i].uid}`)
+                    })
+                    th.appendChild(button)
+                    tr.appendChild(th)
+
                     files.appendChild(tr)
                 }
             }

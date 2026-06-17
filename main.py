@@ -1,7 +1,7 @@
 from tools import Que, Logger
 from flask import render_template, Flask, request, redirect, url_for
 from objects import *
-import sqlite3
+import sqlite3, socket
 
 logger = Logger(console_print=True)
 logger.log("Starting app...")
@@ -21,7 +21,7 @@ logger.log("Query linked!")
 que.query(open("tables.sql", "r").read())
 logger.log("Tables created!")
 
-FileManager = FileManager(logger=logger, que=que)
+FileManager = FileManager(logger=logger, que=que, path="static/files")
 logger.log("File Manager initialised!")
 
 app = Flask(__name__)
@@ -40,6 +40,11 @@ def uploadFile():
     file = request.files['file']
     FileManager.save_file(file, request.remote_addr)
     return redirect(url_for("main"))
+
+@app.route("/downloadFile/<uid>", methods=["GET"])
+def downloadFile(uid):
+    file = FileManager.get_file(uid)
+    return render_template("download.html", fileName=file["filename"])
 
 @app.route("/removeFile/<uid>", methods=["DELETE"])
 def removeFile(uid):
